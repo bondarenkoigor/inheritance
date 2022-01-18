@@ -93,11 +93,55 @@ public:
 	greencircle(int coordX, int coordY, float diameter) : circle(coordX, coordY, diameter, "green") {}
 };
 
+class collection
+{
+private:
+	shape* col;
+	int size;
+public:
+	collection()
+	{
+		this->col = nullptr;
+		size = 0;
+	}
+
+	void add(shape& newShape)
+	{
+		shape* tmp = new shape[size + 1];
+		for (int i = 0; i < size; i++)
+		{
+			tmp[i] = col[i];
+		}
+		tmp[size] = newShape;
+		delete col;
+		col = tmp;
+		size++;
+	}
+
+	std::string getInfo()
+	{
+		std::string info = "";
+		for (int i = 0; i < size; i++)
+		{
+			info += col[i].getInfo() + "\n";
+		}
+		info += "\n";
+		return info;
+	}
+
+};
+
 int main()
 {
-	circle* crcl = new circle(1, 2, 3, "yellow");
-	std::cout << crcl->getInfo() << "\n";
+	collection* col = new collection();
 
-	crcl = new greencircle(crcl->getX(), crcl->getY(), crcl->getdiameter());
-	std::cout << crcl->getInfo() << "\n";
+	circle crcl(1, 2, 3, "yellow");
+	square sqr(4, 5, 10);
+	greencircle green(9, 6, 4);
+
+	col->add(crcl);
+	col->add(sqr);
+	col->add(green);
+
+	std::cout << col->getInfo();
 }
