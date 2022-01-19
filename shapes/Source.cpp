@@ -67,7 +67,7 @@ public:
 	{
 		return color;
 	}
-	std::string getInfo() 
+	std::string getInfo()
 	{
 		return shape::getInfo() + "\tdiameter: " + std::to_string(this->diameter) + "\tcolor: " + color;
 	}
@@ -93,39 +93,48 @@ public:
 	greencircle(int coordX, int coordY, float diameter) : circle(coordX, coordY, diameter, "green") {}
 };
 
+struct Node
+{
+	shape value;
+	Node* next;
+	Node() {}
+	Node(shape value, Node* next) : value(value), next(next) {}
+};
+
 class collection
 {
 private:
-	shape* col;
-	int size;
+	Node* head;
 public:
 	collection()
 	{
-		this->col = nullptr;
-		size = 0;
+		this->head = nullptr;
 	}
 
-	void add(shape& newShape)
+	void add(shape newShape)
 	{
-		shape* tmp = new shape[size + 1];
-		for (int i = 0; i < size; i++)
+		if (this->head == nullptr)
 		{
-			tmp[i] = col[i];
+			this->head = new Node(newShape, nullptr);
+			return;
 		}
-		tmp[size] = newShape;
-		delete col;
-		col = tmp;
-		size++;
+		Node* iter = this->head;
+		while (iter->next != nullptr)
+		{
+			iter = iter->next;
+		}
+		iter->next = new Node(newShape, nullptr);
 	}
 
 	std::string getInfo()
 	{
 		std::string info = "";
-		for (int i = 0; i < size; i++)
+		Node* iter = this->head;
+		while (iter != nullptr)
 		{
-			info += col[i].getInfo() + "\n";
+			info += iter->value.getInfo() + "\n";
+			iter = iter->next;
 		}
-		info += "\n";
 		return info;
 	}
 
